@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crypto Wallet UI</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0e0e0e;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .wallet-card {
+            background: linear-gradient(145deg, #1a1a1a, #111);
+            border-radius: 16px;
+            padding: 24px;
+            width: 300px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .network-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .img-placeholder {
+            width: 24px;
+            height: 24px;
+            background-color: #333;
+            border-radius: 4px;
+        }
+
+        .network-name {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .copy-button {
+            padding: 6px 12px;
+            background-color: #292929;
+            border: none;
+            color: #ddd;
+            font-size: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .wallet-address {
+            font-size: 13px;
+            margin-top: 4px;
+            color: #aaa;
+        }
+
+        .balance-card {
+            background-color: #1c1c1c;
+            padding: 14px;
+            border-radius: 12px;
+            margin: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .balance-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .balance-title {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .balance-subtitle {
+            font-size: 12px;
+            color: #777;
+        }
+
+        .balance-amount {
+            font-size: 20px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .qr-section {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            background-color: #1c1c1c;
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        #qrcode {
+            margin: 0 auto 12px;
+        }
+
+        .qr-label {
+            font-size: 13px;
+            color: #888;
+        }
+
+        .wallet-card {
+            border: 1px solid #00ffffc5;
+            border-radius: 20px;
+            box-shadow: 0 0 10px #00ffff8a, 0 0 20px #00ffff7d, 0 0 30px #00ffff8d;
+            background-color: #111;
+            padding: 20px;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .wallet-wrapper::before {
+            content: "Rative Wallet";
+            position: absolute;
+            font-size: 5rem;
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.05);
+            white-space: nowrap;
+            top: 15%;
+            transform: translateY(-50%);
+            left: 0;
+            animation: moveBackgroundText 12s ease-in-out infinite alternate;
+            z-index: 0;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        @keyframes moveBackgroundText {
+            0% {
+                transform: translate(-100%, -50%);
+            }
+
+            100% {
+                transform: translate(100%, -50%);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wallet-wrapper">
+        <div class="wallet-card">
+            <div class="header">
+                <div class="network-info">
+                    <div class="img-placeholder"></div>
+                    <div class="network-name">Ethereum Mainnet</div>
+                </div>
+                <button class="copy-button" id="copyBtn">Copy</button>
+            </div>
+            <div class="wallet-address" id="walletAddress">Wallet: 0x3F...9A7B</div>
+
+            <div class="balance-card">
+                <div class="balance-left">
+                    <div class="img-placeholder"></div>
+                    <div>
+                        <div class="balance-title">ETH Balance</div>
+                        <div class="balance-subtitle">Your main token</div>
+                    </div>
+                </div>
+                <div class="balance-amount" id="ethBalance">2.476</div>
+            </div>
+
+            <div class="qr-section">
+                <div id="qrcode"></div>
+                <div class="qr-label">Scan to Pay</div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- JavaScript -->
+    <script>
+        const walletAddress = "0x3F91A5fE0a71CD9aDfDA4579cA9B22cB7dD29A7B";
+
+        // Display address in UI
+        document.getElementById("walletAddress").textContent = `Wallet: ${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`;
+
+        // Copy to clipboard
+        document.getElementById("copyBtn").addEventListener("click", () => {
+            navigator.clipboard.writeText(walletAddress).then(() => {
+                alert("Wallet address copied to clipboard!");
+            });
+        });
+
+        // Generate QR Code
+        new QRCode(document.getElementById("qrcode"), {
+            text: walletAddress,
+            width: 120,
+            height: 120,
+            colorDark: "#ffffff",
+            colorLight: "#1c1c1c",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+
+        // Simulate balance fetch (in real dApp, fetch from ethers.js or web3)
+        const balanceInETH = 2.476;
+        document.getElementById("ethBalance").textContent = balanceInETH.toFixed(3);
+    </script>
+</body>
+
+</html>
